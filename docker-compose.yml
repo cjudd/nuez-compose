@@ -1,15 +1,21 @@
-web:
-    image: javajudd/nuez
+version: "3"
+services:
+  db:
+    image: javajudd/nuez-db:1.0
     ports:
-        - "80:8080"
-    links:
-       - "db:mysql"
-db:
-    image: javajudd/nuez-db
-    ports:
-       - "3306:3306"
+      - "3306:3306"
     environment:
-       MYSQL_USER: nuez-app
-       MYSQL_PASSWORD: nuez+1
-       MYSQL_DATABASE: nuez
-       MYSQL_ROOT_PASSWORD: root+1
+       MYSQL_USER: ${DB_USER}
+       MYSQL_PASSWORD: ${DB_PASSWORD}
+       MYSQL_DATABASE: ${DB_DB}
+       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+  web:
+    image: javajudd/nuez:1.0
+    ports:
+      - "80:8080"
+    environment:
+       DB_USER: ${DB_USER}
+       DB_PASSWORD: ${DB_PASSWORD}
+       DB_DB: ${DB_DB}
+       DB_SERVER: db
+       DB_PORT: 3306
